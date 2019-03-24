@@ -1,0 +1,7 @@
+D:\C#Projects\SentenceTense\SentenceTense\obj\Debug\SentenceTense.csprojAssemblyReference.cache
+D:\C#Projects\SentenceTense\SentenceTense\obj\Debug\SentenceTense.csproj.CoreCompileInputs.cache
+D:\C#Projects\SentenceTense\SentenceTense\bin\Debug\SentenceTense.exe.config
+D:\C#Projects\SentenceTense\SentenceTense\bin\Debug\SentenceTense.exe
+D:\C#Projects\SentenceTense\SentenceTense\bin\Debug\SentenceTense.pdb
+D:\C#Projects\SentenceTense\SentenceTense\obj\Debug\SentenceTense.exe
+D:\C#Projects\SentenceTense\SentenceTense\obj\Debug\SentenceTense.pdb
