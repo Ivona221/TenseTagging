@@ -12,7 +12,6 @@ namespace SentenceTense
     {
         public static void TagSents()
         {
-            int milliseconds = 2000;
             string sentences = System.IO.File.ReadAllText(@"D:\NLP\POS\sentenseSubSplit.txt");
             var wordsForFile = sentences.Split(' ');
 
@@ -266,22 +265,31 @@ namespace SentenceTense
                                 (matches1.Count == 1 || matches2.Count == 1 || matches3.Count == 1))
                             {
                                 flag = 1;
+                                sent = sent.Replace(previous, "");
                                 sentTense[sent] = "Минато";
                                 break;
                             }
                             if (glagoli.Count >= 1)
                             {
+                                sent.Replace(current, current.Substring(0, current.Length - 3));
                                 sentTense[sent] = "Минато";
                                 flag = 1;
                                 //taggedWord[current] = TypesOfWords.Глагол.ToString("g");
                                 break;
                             }
 
-                            if (matches1.Count == 1 || matches2.Count == 1 || matches3.Count == 1)
+                            if (matches1.Count == 1)
                             {
+                                sent = sent.Replace(current, current.Substring(0, current.Length - 1));
                                 sentTense[sent] = "Минато";
                                 flag = 1;
-                                //taggedWord[current] = TypesOfWords.Глагол.ToString("g");
+                                break;
+                            }
+                            if (matches2.Count == 1 || matches3.Count == 1)
+                            {
+                                sent = sent.Replace(current, current.Substring(0, current.Length - 2));
+                                sentTense[sent] = "Минато";
+                                flag = 1;
                                 break;
                             }
 
@@ -307,12 +315,13 @@ namespace SentenceTense
                             MatchCollection matches3 = Regex.Matches(next, regexForVerbLForm3);
 
 
-                            if (((current == "сум" || current == "си") && (matches1.Count == 1 || matches2.Count == 1))
-                                || (current == "сме" || current == "сте") && matches3.Count == 1)
+                            if((current == "сум" || current == "си") && matches1.Count == 1)
                             {
-                                nextWord[next] = "глагол";
+                                sent = sent.Replace(current, "");
+                                sent = sent.Replace(next, next.Substring(0, next.Length-1));
                                 if (prePrevious == "ќе")
                                 {
+                                    sent = sent.Replace(prePrevious, "");
                                     flag = 1;
                                     sentTense[sent] = "Минато идно";
                                     break;
@@ -324,9 +333,56 @@ namespace SentenceTense
                                     break;
                                 }
                             }
-                            if (((current == "бев" || current == "беше") && (matches1.Count == 1 || matches2.Count == 1))
+                            if ((current == "сум" || current == "си") && matches2.Count == 1)
+                            {
+                                sent = sent.Replace(current, "");
+                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                if (prePrevious == "ќе")
+                                {
+                                    sent = sent.Replace(prePrevious, "");
+                                    flag = 1;
+                                    sentTense[sent] = "Минато идно";
+                                    break;
+                                }
+                                else
+                                {
+                                    flag = 1;
+                                    sentTense[sent] = "Минато неопределено";
+                                    break;
+                                }
+                            }
+
+                            if ((current == "сме" || current == "сте") && matches3.Count == 1)
+                            {
+                                sent = sent.Replace(current, "");
+                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                if (prePrevious == "ќе")
+                                {
+                                    sent = sent.Replace(prePrevious, "");
+                                    flag = 1;
+                                    sentTense[sent] = "Минато идно";
+                                    break;
+                                }
+                                else
+                                {
+                                    flag = 1;
+                                    sentTense[sent] = "Минато неопределено";
+                                    break;
+                                }
+                            }
+                            if (((current == "бев" || current == "беше") && (matches1.Count == 1)))
+                            {
+                                sent = sent.Replace(current, "");
+                                sent = sent.Replace(next, next.Substring(0, next.Length -1));
+                                flag = 1;
+                                sentTense[sent] = "Минато";
+                                break;
+                            }
+                            if (((current == "бев" || current == "беше") && matches2.Count == 1)
                                 || ((current == "бевме" || current == "бевте" || current == "беа") && matches3.Count == 1))
                             {
+                                sent = sent.Replace(current, "");
+                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                 flag = 1;
                                 sentTense[sent] = "Минато";
                                 break;
@@ -334,6 +390,7 @@ namespace SentenceTense
                             if (((current == "бил" || current == "била"))
                                 || ((current == "биле" || current == "било" || current == "беа")))
                             {
+                                sent = sent.Replace(current, "");
                                 flag = 1;
                                 sentTense[sent] = "Минато";
                                 break;
@@ -348,6 +405,7 @@ namespace SentenceTense
 
                             if (current == "ќе")
                             {
+                                sent = sent.Replace(current, "");
                                 flag = 1;
                                 sentTense[sent] = "Идно";
                                 break;
@@ -360,9 +418,25 @@ namespace SentenceTense
                             MatchCollection glagol6 = Regex.Matches(next, regexForMinatoOpredelenoNesvrsheno6);
                             if (current == "се")
                             {
+                                sent = sent.Replace(current, "");
                                 {
-                                    if(glagol1.Count == 1 || glagol2.Count == 1 || glagol3.Count == 1 || glagol4.Count == 1 || glagol5.Count == 1 || glagol6.Count == 1 )
+                                    if (glagol1.Count == 1 || glagol6.Count == 1)
                                     {
+                                        sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                        flag = 1;
+                                        sentTense[sent] = "Минато";
+                                        break;
+                                    }
+                                    if (glagol2.Count == 1 || glagol3.Count == 1)
+                                    {
+                                        sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                        flag = 1;
+                                        sentTense[sent] = "Минато";
+                                        break;
+                                    }
+                                    if (glagol4.Count == 1 || glagol5.Count == 1)
+                                    {
+                                        sent = sent.Replace(next, next.Substring(0, next.Length - 3));
                                         flag = 1;
                                         sentTense[sent] = "Минато";
                                         break;
@@ -380,8 +454,24 @@ namespace SentenceTense
 
                             if (current == "ја")
                             {
-                                if (glagol1.Count == 1 || glagol2.Count == 1 || glagol3.Count == 1 || glagol4.Count == 1 || glagol5.Count == 1 || glagol6.Count == 1)
+                                sent = sent.Replace(current, "");
+                                if (glagol1.Count == 1 || glagol6.Count == 1)
                                 {
+                                    sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                    flag = 1;
+                                    sentTense[sent] = "Минато";
+                                    break;
+                                }
+                                if (glagol2.Count == 1 || glagol3.Count == 1)
+                                {
+                                    sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                    flag = 1;
+                                    sentTense[sent] = "Минато";
+                                    break;
+                                }
+                                if (glagol4.Count == 1 || glagol5.Count == 1)
+                                {
+                                    sent = sent.Replace(next, next.Substring(0, next.Length - 3));
                                     flag = 1;
                                     sentTense[sent] = "Минато";
                                     break;
@@ -405,7 +495,7 @@ namespace SentenceTense
             }
 
             using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"D:\NLP\POS\taggedTenseSents.txt", true))
+            new System.IO.StreamWriter(@"D:\NLP\POS\taggedSimplifiedTense.txt", true))
             {
                 foreach (KeyValuePair<string, string> entry in sentTense)
                 {
